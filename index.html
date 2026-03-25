@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alkimi — Campaign SLA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #0A0A0F;
+      --surface-1:    #121218;
+      --surface-2:    #1A1A22;
+      --surface-3:    #2A2A35;
+      --purple:       #5C26FF;
+      --purple-light: #8A5CFF;
+      --purple-dark:  #4A1ECC;
+      --green:        #00E87B;
+      --green-light:  #4ADE80;
+      --grey-light:   #C8C8D0;
+      --grey-mid:     #7A7A85;
+      --white:        #FFFFFF;
+      --error:        #FF4D6A;
+      --amber:        #F59E0B;
+      --violet:       #C084FC;
+      --border:       rgba(255,255,255,0.08);
+      --font-title:   'Unbounded', system-ui, sans-serif;
+      --font-body:    'Poppins', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--grey-light);
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.65;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,15,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      height: 64px;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+    }
+    nav .logo svg { height: 22px; width: auto; color: var(--white); }
+    .nav-pills { display: flex; gap: 8px; }
+    .nav-pill {
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+      text-decoration: none;
+      transition: background 0.2s;
+      border: 1px solid transparent;
+    }
+    .nav-pill.pre  { color: var(--purple-light); border-color: rgba(92,38,255,0.3); }
+    .nav-pill.mid  { color: var(--green);         border-color: rgba(0,232,123,0.3); }
+    .nav-pill.post { color: var(--violet);        border-color: rgba(192,132,252,0.3); }
+    .nav-pill:hover { background: rgba(255,255,255,0.06); }
+    .nav-doc-id { font-size: 0.6875rem; color: var(--grey-mid); letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative; overflow: hidden;
+      padding: 100px 48px 72px;
+      max-width: 1200px; margin: 0 auto;
+      text-align: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -60px; left: 50%;
+      transform: translateX(-50%);
+      width: 900px; height: 500px;
+      background: radial-gradient(ellipse at 50% 20%, rgba(92,38,255,0.16) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .overline {
+      display: inline-block;
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--purple-light); margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-family: var(--font-title);
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      font-weight: 700; color: var(--white);
+      text-transform: uppercase; letter-spacing: -0.025em;
+      line-height: 1.08; margin-bottom: 20px;
+    }
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(90deg, #5C26FF 0%, #00E87B 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub { font-size: 1.0625rem; color: var(--grey-mid); max-width: 560px; margin: 0 auto 48px; }
+
+    /* phase strip */
+    .phase-strip {
+      display: flex; max-width: 760px; margin: 0 auto;
+      border-radius: 14px; overflow: hidden; border: 1px solid var(--border);
+    }
+    .phase-block { flex: 1; padding: 20px 24px; text-align: center; position: relative; }
+    .phase-block + .phase-block::before {
+      content: ''; position: absolute; left: 0; top: 20%; height: 60%;
+      width: 1px; background: var(--border);
+    }
+    .phase-block.pre  { background: rgba(92,38,255,0.08); }
+    .phase-block.mid  { background: rgba(0,232,123,0.07); }
+    .phase-block.post { background: rgba(192,132,252,0.08); }
+    .phase-num {
+      font-family: var(--font-title); font-size: 0.6875rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .phase-num.pre  { color: var(--purple); }
+    .phase-num.mid  { color: var(--green); }
+    .phase-num.post { color: var(--violet); }
+    .phase-label { font-size: 0.875rem; font-weight: 600; color: var(--white); }
+
+    /* ─── SECTIONS ─── */
+    .phase-section {
+      max-width: 1200px; margin: 0 auto;
+      padding: 72px 48px; border-top: 1px solid var(--border);
+    }
+    .phase-header { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 48px; }
+    .phase-icon-wrap {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.375rem; flex-shrink: 0;
+    }
+    .phase-icon-wrap.pre  { background: rgba(92,38,255,0.15); }
+    .phase-icon-wrap.mid  { background: rgba(0,232,123,0.12); }
+    .phase-icon-wrap.post { background: rgba(192,132,252,0.15); }
+    .phase-header-text .phase-tag {
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 4px;
+    }
+    .phase-tag.pre  { color: var(--purple-light); }
+    .phase-tag.mid  { color: var(--green); }
+    .phase-tag.post { color: var(--violet); }
+    .phase-header-text h2 {
+      font-family: var(--font-body); font-size: 1.625rem;
+      font-weight: 700; color: var(--white); line-height: 1.2;
+    }
+    .phase-header-text p { font-size: 0.9375rem; color: var(--grey-mid); margin-top: 6px; max-width: 560px; }
+
+    /* ─── TIMELINE ROWS ─── */
+    .timeline { display: flex; flex-direction: column; gap: 12px; }
+    .tl-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px 32px;
+      align-items: start;
+      padding: 22px 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .tl-row:hover { border-color: rgba(255,255,255,0.13); background: rgba(255,255,255,0.055); }
+    .tl-left { display: flex; flex-direction: column; gap: 4px; }
+    .tl-milestone { font-size: 0.9375rem; font-weight: 600; color: var(--white); }
+    .tl-note { font-size: 0.8125rem; color: var(--grey-mid); }
+    .tl-right { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+    .tl-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 9999px;
+      font-size: 0.8125rem; font-weight: 600; white-space: nowrap;
+    }
+    .tl-badge.pre  { background: rgba(92,38,255,0.15);  color: var(--purple-light); border: 1px solid rgba(92,38,255,0.25); }
+    .tl-badge.mid  { background: rgba(0,232,123,0.1);   color: var(--green);         border: 1px solid rgba(0,232,123,0.2); }
+    .tl-badge.post { background: rgba(192,132,252,0.12); color: var(--violet);        border: 1px solid rgba(192,132,252,0.2); }
+    .tl-rush {
+      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--amber); background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25);
+      padding: 3px 10px; border-radius: 9999px;
+    }
+
+    /* ─── SLA TABLE ─── */
+    .sla-table-wrap {
+      overflow-x: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+    .sla-global-note {
+      padding: 12px 20px;
+      background: rgba(0,232,123,0.07);
+      border-bottom: 1px solid rgba(0,232,123,0.15);
+      font-size: 0.8125rem; color: var(--green);
+      font-weight: 500; letter-spacing: 0.02em;
+      text-align: center;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+    thead tr { background: var(--surface-2); }
+    thead th {
+      padding: 14px 20px;
+      font-size: 0.6875rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      text-align: left; white-space: nowrap;
+      border-bottom: 1px solid var(--border);
+    }
+    thead th:first-child { color: var(--grey-mid); }
+    thead th.ack { color: var(--grey-mid); }
+    thead th.p1  { color: var(--error); }
+    thead th.p2  { color: var(--purple-light); }
+    thead th.p3  { color: var(--green); }
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    tbody td { padding: 14px 20px; color: var(--grey-light); vertical-align: middle; }
+    tbody td:first-child { color: var(--white); font-weight: 500; }
+    .td-chip {
+      display: inline-block;
+      padding: 4px 10px; border-radius: 6px;
+      font-size: 0.8rem; font-weight: 600; white-space: nowrap;
+    }
+    .td-chip.ack  { background: rgba(255,255,255,0.07); color: var(--grey-light); }
+    .td-chip.p1   { background: rgba(255,77,106,0.1);   color: var(--error); }
+    .td-chip.p2   { background: rgba(92,38,255,0.1);    color: var(--purple-light); }
+    .td-chip.p3   { background: rgba(0,232,123,0.08);   color: var(--green); }
+    .td-chip.none { background: transparent; color: var(--grey-mid); }
+
+    /* ─── INFO BANNERS ─── */
+    .info-banner {
+      margin-top: 24px; padding: 18px 22px; border-radius: 12px;
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .info-banner.purple { background: rgba(92,38,255,0.08); border: 1px solid rgba(92,38,255,0.2); }
+    .info-banner.green  { background: rgba(0,232,123,0.07); border: 1px solid rgba(0,232,123,0.2); }
+    .info-banner.violet { background: rgba(192,132,252,0.08); border: 1px solid rgba(192,132,252,0.2); }
+    .info-banner .banner-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .info-banner p { font-size: 0.875rem; color: var(--grey-light); }
+    .info-banner strong { color: var(--white); }
+
+    /* ─── POST METRICS ─── */
+    .post-metrics {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px; margin-bottom: 24px;
+    }
+    .post-metric {
+      padding: 24px 28px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); border-radius: 14px;
+      border-top: 3px solid var(--violet);
+    }
+    .post-metric .pm-label {
+      font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--violet); margin-bottom: 10px;
+    }
+    .post-metric .pm-value { font-size: 1.375rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+    .post-metric .pm-note { font-size: 0.8125rem; color: var(--grey-mid); }
+
+    /* ─── FOOTER ─── */
+    .footer-outer { border-top: 1px solid var(--border); }
+    footer {
+      max-width: 1200px; margin: 0 auto; padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    footer .logo svg { height: 20px; width: auto; color: var(--grey-mid); }
+    footer .doc-info { text-align: right; }
+    footer .doc-info p { font-size: 0.8125rem; color: var(--grey-mid); line-height: 1.6; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .nav-pills { display: none; }
+      .hero { padding: 64px 20px 48px; }
+      .phase-section { padding: 48px 20px; }
+      footer { padding: 32px 20px; flex-direction: column; }
+      footer .doc-info { text-align: left; }
+      .phase-strip { flex-direction: column; }
+      .phase-block + .phase-block::before { display: none; }
+      .tl-row { grid-template-columns: 1fr; }
+      .tl-right { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <div class="logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="68 46 216 48" fill="none">
+      <path d="M83.8615 58.6759C78.5907 58.5085 73.4034 59.9878 69.0608 62.8966L72.2676 68.7C75.3341 66.4522 79.084 65.2623 82.9241 65.3187C88.7704 65.3187 91.6565 68.0525 91.6565 72.7289V73.2325H82.5787C71.9222 73.2325 68 77.693 68 83.4005C68 89.1081 73.057 93.6166 81.074 93.6166C86.3283 93.6166 90.1518 91.9618 92.1005 89.0121V93.1609H99.8462V73.0646C99.8462 63.2323 93.9999 58.6759 83.8861 58.6759H83.8615ZM91.6319 82.5132C90.9055 84.187 89.6588 85.5979 88.0663 86.5483C86.4738 87.4987 84.6154 87.9409 82.7514 87.8131C78.5332 87.8131 76.0417 85.9665 76.0417 83.0168C76.0417 80.6187 77.5465 78.4844 83.1461 78.4844H91.6319V82.4413V82.5132Z" fill="currentColor"/>
+      <path d="M113.711 46H105.497V93.4109H113.711V46Z" fill="currentColor"/>
+      <path d="M145.855 93.7292H155.845L139.811 73.9447L154.464 59.6278H144.597L127.576 74.9519V46H119.361V93.7292H127.576V84.7362L133.693 79.1006L145.855 93.7292Z" fill="currentColor"/>
+      <path d="M167.592 59.3477H159.378V93.473H167.592V59.3477Z" fill="currentColor"/>
+      <path d="M218.253 59.034C215.761 58.9459 213.281 59.412 211.002 60.397C208.724 61.382 206.707 62.8597 205.105 64.7176C203.822 62.8392 202.051 61.324 199.972 60.3258C197.892 59.3277 195.578 58.8819 193.264 59.034C191.102 58.9506 188.947 59.3381 186.958 60.1679C184.97 60.9977 183.197 62.2489 181.769 63.8302V59.4896H173.949V93.591H182.164V76.2765C182.164 69.5138 185.839 66.0605 191.291 66.0605C196.224 66.0605 199.184 69.0102 199.184 75.0774V93.591H207.399V76.2765C207.399 69.5138 211.148 66.0605 216.526 66.0605C221.46 66.0605 224.42 69.0102 224.42 75.0774V93.591H232.634V74.0463C232.634 63.7583 226.714 59.1059 218.253 59.1059" fill="currentColor"/>
+      <path d="M246.093 85.2653V67.2933C246.093 62.7562 242.415 59.0781 237.877 59.0781V93.4804C242.415 93.4804 246.093 89.8024 246.093 85.2653Z" fill="currentColor"/>
+      <path d="M262.163 59.0781C260.952 59.0781 261.062 60.3218 261.503 60.7674C261.985 61.1977 263.589 62.8645 263.589 62.8645L263.589 67.5642C263.589 67.5642 254.221 84.7493 253.026 86.9955C251.49 89.8835 253.906 93.4804 256.657 93.4804C258.562 93.4804 275.266 93.4804 278.111 93.4804C281.412 93.4804 283.833 90.0974 282.292 86.9955C281.75 85.9032 271.51 67.5642 271.51 67.5642V62.867L273.621 60.7674C274.267 60.1379 273.968 59.0781 273.044 59.0781C272.12 59.0781 263.549 59.0781 262.163 59.0781Z" fill="currentColor"/>
+    </svg>
+  </div>
+  <div class="nav-pills">
+    <a href="#pre-campaign"  class="nav-pill pre">Pre-Campaign</a>
+    <a href="#mid-campaign"  class="nav-pill mid">In-Campaign</a>
+    <a href="#post-campaign" class="nav-pill post">Post-Campaign</a>
+  </div>
+  <span class="nav-doc-id">Campaign SLA · v1.0</span>
+</nav>
+
+<!-- ─── HERO ─── -->
+<div class="hero">
+  <span class="overline">Client Services</span>
+  <h1>Campaign <em>SLA</em></h1>
+  <p class="hero-sub">What we need from you, when we need it — and what you can expect from us at every stage of your campaign.</p>
+  <div class="phase-strip">
+    <div class="phase-block pre">
+      <div class="phase-num pre">Phase 01</div>
+      <div class="phase-label">Pre-Campaign</div>
+    </div>
+    <div class="phase-block mid">
+      <div class="phase-num mid">Phase 02</div>
+      <div class="phase-label">In-Campaign</div>
+    </div>
+    <div class="phase-block post">
+      <div class="phase-num post">Phase 03</div>
+      <div class="phase-label">Post-Campaign</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     PHASE 01 — PRE-CAMPAIGN
+═══════════════════════════════ -->
+<section class="phase-section" id="pre-campaign">
+  <div class="phase-header">
+    <div class="phase-icon-wrap pre">🚀</div>
+    <div class="phase-header-text">
+      <div class="phase-tag pre">Phase 01</div>
+      <h2>Pre-Campaign</h2>
+      <p>Everything we need in place before your campaign goes live. Hitting these deadlines ensures a smooth, on-time launch.</p>
+    </div>
+  </div>
+
+  <div class="timeline">
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">Signed Insertion Order (IO)</div>
+        <div class="tl-note">Must be received before campaign setup can begin — no campaign is trafficked without a countersigned IO.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">3–5 days before go-live</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">Creative Assets &amp; Tags</div>
+        <div class="tl-note">All final creatives, tags, and banner/video files. Checked immediately upon receipt for brand safety and technical compliance.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">3–5 days before go-live</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">AI Insight Study Questions <span style="font-size:0.8rem;font-weight:400;color:var(--grey-mid);">(if applicable)</span></div>
+        <div class="tl-note">Where an AI Insight Study is included in scope. 3 days is the absolute minimum — earlier is always preferred.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">3–5 days before go-live</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">BLS Study Questions <span style="font-size:0.8rem;font-weight:400;color:var(--grey-mid);">(if applicable)</span></div>
+        <div class="tl-note">Where a Brand Lift Study is included in scope. Questions must be confirmed ahead of launch to allow for integration and setup.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">3–5 days before go-live</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">Bespoke Creative Builds</div>
+        <div class="tl-note">Where Alkimi is building or adapting creative formats. Rush builds available but require direct escalation.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">5–10 days before go-live</div>
+        <div class="tl-rush">Rush: 3–5 days</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">New Campaign Setup — Standard</div>
+        <div class="tl-note">Full trafficking, targeting configuration, and QA for a standard single-format campaign.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">2–3 business days</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">New Campaign Setup — Complex / Multi-Format</div>
+        <div class="tl-note">Campaigns spanning multiple formats, geos, or audience segments. Rush setup requires escalation — please raise directly with your Alkimi CSM team.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">3–5 business days</div>
+        <div class="tl-rush">Rush: contact Alkimi CSM team</div>
+      </div>
+    </div>
+
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">Kick-off Call</div>
+        <div class="tl-note">A campaign launch thread is set up for every campaign. A dedicated client kick-off call is available on request.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge pre">Pre-campaign</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="info-banner purple">
+    <span class="banner-icon">💡</span>
+    <p>Missing any of the above deadlines may push back your go-live date. Your CSA will flag any risk to launch timing as soon as it's identified and advise on revised timelines.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     PHASE 02 — IN-CAMPAIGN
+═══════════════════════════════ -->
+<section class="phase-section" id="mid-campaign">
+  <div class="phase-header">
+    <div class="phase-icon-wrap mid">⚡</div>
+    <div class="phase-header-text">
+      <div class="phase-tag mid">Phase 02</div>
+      <h2>In-Campaign</h2>
+      <p>Response and resolution times for all change requests and reporting during the campaign flight. All requests are triaged by priority.</p>
+    </div>
+  </div>
+
+  <div class="sla-table-wrap">
+    <div class="sla-global-note">All requests acknowledged within 1–2 business hours</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Request Type</th>
+          <th class="ack">Acknowledgement</th>
+          <th class="p1">P1 — Critical</th>
+          <th class="p2">P2 — Standard</th>
+          <th class="p3">P3 — Low</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Creative Changes<br><span style="font-size:0.75rem;color:var(--grey-mid);">Tags, brand safety, creatives</span></td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">2–4 business hours</span></td>
+          <td><span class="td-chip p2">Next business day</span></td>
+          <td><span class="td-chip p3">2–3 business days</span></td>
+        </tr>
+        <tr>
+          <td>Targeting Changes</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">2–4 business hours</span></td>
+          <td><span class="td-chip p2">Next business day</span></td>
+          <td><span class="td-chip p3">2 business days</span></td>
+        </tr>
+        <tr>
+          <td>Pacing Changes</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">1–2 business hours</span></td>
+          <td><span class="td-chip p2">4–8 business hours</span></td>
+          <td><span class="td-chip p3">Next business day</span></td>
+        </tr>
+        <tr>
+          <td>Budget Up / Down Weights</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">2–4 business hours</span></td>
+          <td><span class="td-chip p2">Next business day</span></td>
+          <td><span class="td-chip p3">2 business days</span></td>
+        </tr>
+        <tr>
+          <td>Site List / Domain Changes</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">1–2 business hours</span></td>
+          <td><span class="td-chip p2">4–6 business hours</span></td>
+          <td><span class="td-chip p3">Next business day</span></td>
+        </tr>
+        <tr>
+          <td>Date Changes</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip p1">2–4 business hours</span></td>
+          <td><span class="td-chip p2">Same day by 2PM UK</span></td>
+          <td><span class="td-chip p3">1 business day notice</span></td>
+        </tr>
+        <tr>
+          <td>Reports — Standard</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip none">—</span></td>
+          <td><span class="td-chip p2">24 hours</span></td>
+          <td><span class="td-chip none">—</span></td>
+        </tr>
+        <tr>
+          <td>Reports — Custom / Ad-hoc</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip none">—</span></td>
+          <td><span class="td-chip p2">1–2 business days</span></td>
+          <td><span class="td-chip p3">2–3 business days</span></td>
+        </tr>
+        <tr>
+          <td>Budget Upweight via New IO</td>
+          <td><span class="td-chip ack">1–2 hours</span></td>
+          <td><span class="td-chip none">—</span></td>
+          <td><span class="td-chip p2">2–3 business days</span></td>
+          <td><span class="td-chip p3">3–5 business days</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="info-banner green">
+    <span class="banner-icon">💡</span>
+    <p><strong>Priority guide:</strong> P1 = live campaign impacted or at risk of under-delivery. P2 = standard optimisation or change request. P3 = non-urgent, future-planning, or administrative. If you're unsure, your CSA will triage on receipt.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════
+     PHASE 03 — POST-CAMPAIGN
+═══════════════════════════════ -->
+<section class="phase-section" id="post-campaign">
+  <div class="phase-header">
+    <div class="phase-icon-wrap post">📋</div>
+    <div class="phase-header-text">
+      <div class="phase-tag post">Phase 03</div>
+      <h2>Post-Campaign</h2>
+      <p>What happens after your campaign ends — from final analysis to insights presentation.</p>
+    </div>
+  </div>
+
+  <div class="post-metrics">
+    <div class="post-metric">
+      <div class="pm-label">PCA Delivery</div>
+      <div class="pm-value">~2 weeks</div>
+      <div class="pm-note">After campaign end date</div>
+    </div>
+    <div class="post-metric">
+      <div class="pm-label">PCA Presentation</div>
+      <div class="pm-value">Scheduled</div>
+      <div class="pm-note">Following PCA delivery — timing is project-dependent</div>
+    </div>
+    <div class="post-metric">
+      <div class="pm-label">Reporting Cadence</div>
+      <div class="pm-value">Weekly</div>
+      <div class="pm-note">Shared via your campaign launch thread</div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">Post-Campaign Analysis (PCA) Delivery</div>
+        <div class="tl-note">Full PCA covering delivery, performance against KPIs, viewability, audience insights, and recommendations for future campaigns.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge post">~2 weeks post end date</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">PCA Presentation to Client</div>
+        <div class="tl-note">Timing is project-dependent. Your CSA will coordinate a session following PCA delivery to walk through findings and planning recommendations.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge post">Following PCA delivery</div>
+      </div>
+    </div>
+    <div class="tl-row">
+      <div class="tl-left">
+        <div class="tl-milestone">In-Campaign Reporting</div>
+        <div class="tl-note">Weekly performance reports shared directly via your campaign launch thread throughout the flight.</div>
+      </div>
+      <div class="tl-right">
+        <div class="tl-badge post">Weekly</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-banner violet">
+    <span class="banner-icon">💡</span>
+    <p>The PCA is your campaign's full story — not just the numbers. We'll walk you through what performed, what we'd optimise, and how the learnings apply to your next campaign planning cycle.</p>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<div class="footer-outer">
+  <footer>
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="68 46 216 48" fill="none">
+        <path d="M83.8615 58.6759C78.5907 58.5085 73.4034 59.9878 69.0608 62.8966L72.2676 68.7C75.3341 66.4522 79.084 65.2623 82.9241 65.3187C88.7704 65.3187 91.6565 68.0525 91.6565 72.7289V73.2325H82.5787C71.9222 73.2325 68 77.693 68 83.4005C68 89.1081 73.057 93.6166 81.074 93.6166C86.3283 93.6166 90.1518 91.9618 92.1005 89.0121V93.1609H99.8462V73.0646C99.8462 63.2323 93.9999 58.6759 83.8861 58.6759H83.8615ZM91.6319 82.5132C90.9055 84.187 89.6588 85.5979 88.0663 86.5483C86.4738 87.4987 84.6154 87.9409 82.7514 87.8131C78.5332 87.8131 76.0417 85.9665 76.0417 83.0168C76.0417 80.6187 77.5465 78.4844 83.1461 78.4844H91.6319V82.4413V82.5132Z" fill="currentColor"/>
+        <path d="M113.711 46H105.497V93.4109H113.711V46Z" fill="currentColor"/>
+        <path d="M145.855 93.7292H155.845L139.811 73.9447L154.464 59.6278H144.597L127.576 74.9519V46H119.361V93.7292H127.576V84.7362L133.693 79.1006L145.855 93.7292Z" fill="currentColor"/>
+        <path d="M167.592 59.3477H159.378V93.473H167.592V59.3477Z" fill="currentColor"/>
+        <path d="M218.253 59.034C215.761 58.9459 213.281 59.412 211.002 60.397C208.724 61.382 206.707 62.8597 205.105 64.7176C203.822 62.8392 202.051 61.324 199.972 60.3258C197.892 59.3277 195.578 58.8819 193.264 59.034C191.102 58.9506 188.947 59.3381 186.958 60.1679C184.97 60.9977 183.197 62.2489 181.769 63.8302V59.4896H173.949V93.591H182.164V76.2765C182.164 69.5138 185.839 66.0605 191.291 66.0605C196.224 66.0605 199.184 69.0102 199.184 75.0774V93.591H207.399V76.2765C207.399 69.5138 211.148 66.0605 216.526 66.0605C221.46 66.0605 224.42 69.0102 224.42 75.0774V93.591H232.634V74.0463C232.634 63.7583 226.714 59.1059 218.253 59.1059" fill="currentColor"/>
+        <path d="M246.093 85.2653V67.2933C246.093 62.7562 242.415 59.0781 237.877 59.0781V93.4804C242.415 93.4804 246.093 89.8024 246.093 85.2653Z" fill="currentColor"/>
+        <path d="M262.163 59.0781C260.952 59.0781 261.062 60.3218 261.503 60.7674C261.985 61.1977 263.589 62.8645 263.589 62.8645L263.589 67.5642C263.589 67.5642 254.221 84.7493 253.026 86.9955C251.49 89.8835 253.906 93.4804 256.657 93.4804C258.562 93.4804 275.266 93.4804 278.111 93.4804C281.412 93.4804 283.833 90.0974 282.292 86.9955C281.75 85.9032 271.51 67.5642 271.51 67.5642V62.867L273.621 60.7674C274.267 60.1379 273.968 59.0781 273.044 59.0781C272.12 59.0781 263.549 59.0781 262.163 59.0781Z" fill="currentColor"/>
+      </svg>
+    </div>
+    <div class="doc-info">
+      <p>Campaign SLA · Version 1.0</p>
+      <p>Prepared by Alkimi Client Services</p>
+    </div>
+  </footer>
+</div>
+
+</body>
+</html>
